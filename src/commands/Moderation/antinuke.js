@@ -13,22 +13,19 @@ export default {
     .setName('antinuke')
     .setDescription('Manage Anti-Nuke system')
 
-    .addSubcommand(sub =>
-      sub
-        .setName('enable')
+    .addSubcommand(s =>
+      s.setName('enable')
         .setDescription('Enable Anti-Nuke')
     )
 
-    .addSubcommand(sub =>
-      sub
-        .setName('disable')
+    .addSubcommand(s =>
+      s.setName('disable')
         .setDescription('Disable Anti-Nuke')
     )
 
-    .addSubcommand(sub =>
-      sub
-        .setName('status')
-        .setDescription('View Anti-Nuke configuration')
+    .addSubcommand(s =>
+      s.setName('status')
+        .setDescription('View Anti-Nuke status')
     )
 
     .setDefaultMemberPermissions(
@@ -38,145 +35,71 @@ export default {
   category: 'moderation',
 
   async execute(interaction, config, client) {
+    try {
+      const sub = interaction.options.getSubcommand();
+      const key = `antinuke:${interaction.guild.id}`;
 
-    const sub =
-      interaction.options.getSubcommand();
+      let data = await client.db.get(key);
 
-    const key =
-      `antinuke:${interaction.guild.id}`;
+      if (!data) {
+        data = {
+          enabled: false,
+          punishment: 'removeroles',
+          thresholds: {
+            channelDelete: 3,
+            roleDelete: 3,
+            roleCreate: 5
+          },
+          whitelist: [],
+          logChannel: null
+        };
+      }
 
-    let data =
-      await client.db.get(key);
+      if (sub === 'enable') {
+        data.enabled = true;
+        await client.db.set(key, data);
 
-    if (!data) {
-      data = {
-        enabled: false,
-        punishment: 'removeroles',
-        thresholds: {
-          channelDelete: 3,
-          roleDelete: 3,
-          roleCreate: 5
-        },
-        whitelist: [],
-        logChannel: null
-      };
-    }
+        return interaction.reply({
+          embeds: [
+            successEmbed('Anti-Nuke Enabled')
+          ]
+        });
+      }
 
-    if (sub === 'enable') {
+      if (sub === 'disable') {
+        data.enabled = false;
+        await client.db.set(key, data);
 
-      data.enabled = true;
+        return interaction.reply({
+          embeds: [
+            successEmbed('Anti-Nuke Disabled')
+          ]
+        });
+      }
 
-      await client.db.set(
-        key,
-        data
-      );
+      if (sub === 'status') {
+        return interaction.reply({
+          embeds: [
+            infoEmbed(
+`Enabled: ${data.enabled ? 'Yes' : 'No'}
+Punishment: ${data.punishment}
 
-      return interaction.reply({
-        embeds: [
-          successEmbed(
-            '🛡 Anti-Nuke Enabled',
-            'Anti-Nuke protection is now enabled.'
-          )
-        ]
-      });
-    }
+ChannelDelete: ${data.thresholds.channelDelete}
+RoleDelete: ${data.thresholds.roleDelete}
+RoleCreate: ${data.thresholds.roleCreate}
 
-    if (sub === 'disable') {
+Whitelist: ${data.whitelist.length}`
+            )
+          ]
+        });
+      }
 
-      data.enabled = false;
-
-      await client.db.set(
-        key,
-        data
-      );
-
-      return interaction.reply({
-        embeds: [
-          successEmbed(
-            '❌ Anti-Nuke Disabled',
-            'Anti-Nuke protection is now disabled.'
-          )
-        ]
-      });
-    }
-
-    if (sub === 'status') {
+    } catch (err) {
+      console.error('antinuke error:', err);
 
       return interaction.reply({
-        embeds: [
-          infoEmbed(
-            '🛡 Anti-Nuke Status',
-            `**Enabled:** ${data.enabled ? 'Yes' : 'No'}
-
-**Punishment:** ${data.punishment}
-
-**Channel Delete Limit:** ${data.thresholds.channelDelete}
-
-**Role Delete Limit:** ${data.thresholds.roleDelete}
-
-**Role Create Limit:** ${data.thresholds.roleCreate}
-
-**Whitelist Users:** ${data.whitelist.length}`
-          )
-        ]
-      });
-    }
-  }
-};import {
-  SlashCommandBuilder,
-  PermissionFlagsBits
-} from 'discord.js';
-
-import { successEmbed } from '../../utils/embeds.js';
-
-export default {
-  data: new SlashCommandBuilder()
-    .setName('antinuke')
-    .setDescription('Configure anti-nuke')
-    .addSubcommand(sub =>
-      sub
-        .setName('enable')
-        .setDescription('Enable anti-nuke')
-    )
-    .addSubcommand(sub =>
-      sub
-        .setName('disable')
-        .setDescription('Disable anti-nuke')
-    )
-    .setDefaultMemberPermissions(
-      PermissionFlagsBits.Administrator
-    ),
-
-  category: 'moderation',
-
-  async execute(interaction, config, client) {
-    const sub = interaction.options.getSubcommand();
-
-    const key = `antinuke:${interaction.guild.id}`;
-
-    if (sub === 'enable') {
-      await client.db.set(key, true);
-
-      return interaction.reply({
-        embeds: [
-          successEmbed(
-            'Anti-Nuke Enabled',
-            'Anti-nuke protection is now enabled.'
-          )
-        ]
-      });
-    }
-
-    if (sub === 'disable') {
-      await client.db.set(key, false);
-
-      return interaction.reply({
-        embeds: [
-          successEmbed(
-            'Anti-Nuke Disabled',
-            'Anti-nuke protection is now disabled.'
-          )
-        ]
+        content: 'Error loading Anti-Nuke command.',
+        ephemeral: true
       });
     }
   }
