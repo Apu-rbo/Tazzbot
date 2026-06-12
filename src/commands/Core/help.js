@@ -1,4 +1,4 @@
-﻿import {
+import {
     SlashCommandBuilder,
     ActionRowBuilder,
     ButtonBuilder,
@@ -40,10 +40,6 @@ const CATEGORY_ICONS = {
     Config: "⚙️",
 };
 
-
-
-
-
 export async function createInitialHelpMenu(client) {
     const commandsPath = path.join(__dirname, "../../commands");
     const categoryDirs = (
@@ -73,93 +69,31 @@ export async function createInitialHelpMenu(client) {
     ];
 
     const botName = client?.user?.username || "Bot";
-    const embed = createEmbed({ 
+    const embed = createEmbed({
         title: `🤖 ${botName} Help Center`,
         description: "Your all-in-one Discord companion for moderation, economy, fun, and server management.",
         color: 'primary'
     });
 
     embed.addFields(
-        {
-            name: "🛡️ **Moderation**",
-            value: "Server moderation, user management, and enforcement tools",
-            inline: true
-        },
-        {
-            name: "💰 **Economy**",
-            value: "Currency system, shops, and virtual economy",
-            inline: true
-        },
-        {
-            name: "🎮 **Fun**",
-            value: "Games, entertainment, and interactive commands",
-            inline: true
-        },
-        {
-            name: "📊 **Leveling**",
-            value: "User levels, XP system, and progression tracking",
-            inline: true
-        },
-        {
-            name: "🎫 **Tickets**",
-            value: "Support ticket system for server management",
-            inline: true
-        },
-        {
-            name: "🎉 **Giveaways**",
-            value: "Automated giveaway management and distribution",
-            inline: true
-        },
-        {
-            name: "👋 **Welcome**",
-            value: "Member welcome messages and onboarding",
-            inline: true
-        },
-        {
-            name: "🎂 **Birthdays**",
-            value: "Birthday tracking and celebration features",
-            inline: true
-        },
-        {
-            name: "👥 **Community**",
-            value: "Community tools, applications, and member engagement",
-            inline: true
-        },
-        {
-            name: "⚙️ **Config**",
-            value: "Server and bot configuration management commands",
-            inline: true
-        },
-        {
-            name: "🔢 **Counter**",
-            value: "Live counter channel setup and counter controls",
-            inline: true
-        },
-        {
-            name: "🎙️ **Join to Create**",
-            value: "Dynamic voice channel creation and management",
-            inline: true
-        },
-        {
-            name: "🎭 **Reaction Roles**",
-            value: "Self-assignable roles using reaction-role systems",
-            inline: true
-        },
-        {
-            name: "✅ **Verification**",
-            value: "Member verification workflows and access gating",
-            inline: true
-        },
-        {
-            name: "🔧 **Utilities**",
-            value: "Useful tools and server utilities",
-            inline: true
-        }
+        { name: "🛡️ **Moderation**", value: "Server moderation, user management, and enforcement tools", inline: true },
+        { name: "💰 **Economy**", value: "Currency system, shops, and virtual economy", inline: true },
+        { name: "🎮 **Fun**", value: "Games, entertainment, and interactive commands", inline: true },
+        { name: "📊 **Leveling**", value: "User levels, XP system, and progression tracking", inline: true },
+        { name: "🎫 **Tickets**", value: "Support ticket system for server management", inline: true },
+        { name: "🎉 **Giveaways**", value: "Automated giveaway management and distribution", inline: true },
+        { name: "👋 **Welcome**", value: "Member welcome messages and onboarding", inline: true },
+        { name: "🎂 **Birthdays**", value: "Birthday tracking and celebration features", inline: true },
+        { name: "👥 **Community**", value: "Community tools, applications, and member engagement", inline: true },
+        { name: "⚙️ **Config**", value: "Server and bot configuration management commands", inline: true },
+        { name: "🔢 **Counter**", value: "Live counter channel setup and counter controls", inline: true },
+        { name: "🎙️ **Join to Create**", value: "Dynamic voice channel creation and management", inline: true },
+        { name: "🎭 **Reaction Roles**", value: "Self-assignable roles using reaction-role systems", inline: true },
+        { name: "✅ **Verification**", value: "Member verification workflows and access gating", inline: true },
+        { name: "🔧 **Utilities**", value: "Useful tools and server utilities", inline: true }
     );
 
-    embed.setFooter({ 
-        text: "Made with ❤️" 
-    });
+    embed.setFooter({ text: "Made with ❤️" });
     embed.setTimestamp();
 
     const bugReportButton = new ButtonBuilder()
@@ -169,12 +103,7 @@ export async function createInitialHelpMenu(client) {
 
     const supportButton = new ButtonBuilder()
         .setLabel("Support Server")
-        .setURL("https://discord.gg/QnWNz2dKCE")
-        .setStyle(ButtonStyle.Link);
-
-    const touchpointButton = new ButtonBuilder()
-        .setLabel("Learn from Touchpoint")
-        .setURL("https://www.youtube.com/@TouchDisc")
+        .setURL("https://discord.gg/xkwdvfa2J6")
         .setStyle(ButtonStyle.Link);
 
     const selectRow = createSelectMenu(
@@ -186,7 +115,6 @@ export async function createInitialHelpMenu(client) {
     const buttonRow = new ActionRowBuilder().addComponents([
         bugReportButton,
         supportButton,
-        touchpointButton,
     ]);
 
     return {
@@ -201,10 +129,9 @@ export default {
         .setDescription("Displays the help menu with all available commands"),
 
     async execute(interaction, guildConfig, client) {
-        
         const { MessageFlags } = await import('discord.js');
         await InteractionHelper.safeDefer(interaction);
-        
+
         const { embeds, components } = await createInitialHelpMenu(client);
 
         await InteractionHelper.safeEditReply(interaction, {
@@ -225,10 +152,8 @@ export default {
                     components: [],
                 });
             } catch (error) {
-                
+                // silence timeout errors
             }
         }, HELP_MENU_TIMEOUT_MS);
     },
 };
-
-
