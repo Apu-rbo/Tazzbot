@@ -24,7 +24,6 @@ const HELP_MENU_TIMEOUT_MS = 5 * 60 * 1000;
 const CATEGORY_ICONS = {
     Core: "ℹ️",
     Moderation: "🛡️",
-    Economy: "💰",
     Fun: "🎮",
     Leveling: "📊",
     Utility: "🔧",
@@ -71,13 +70,12 @@ export async function createInitialHelpMenu(client) {
     const botName = client?.user?.username || "Bot";
     const embed = createEmbed({
         title: `🤖 ${botName} Help Center`,
-        description: "Your all-in-one Discord companion for moderation, economy, fun, and server management.",
+        description: "Your all-in-one Discord companion for moderation, fun, and server management.",
         color: 'primary'
     });
 
     embed.addFields(
         { name: "🛡️ **Moderation**", value: "Server moderation, user management, and enforcement tools", inline: true },
-        { name: "💰 **Economy**", value: "Currency system, shops, and virtual economy", inline: true },
         { name: "🎮 **Fun**", value: "Games, entertainment, and interactive commands", inline: true },
         { name: "📊 **Leveling**", value: "User levels, XP system, and progression tracking", inline: true },
         { name: "🎫 **Tickets**", value: "Support ticket system for server management", inline: true },
@@ -90,7 +88,8 @@ export async function createInitialHelpMenu(client) {
         { name: "🎙️ **Join to Create**", value: "Dynamic voice channel creation and management", inline: true },
         { name: "🎭 **Reaction Roles**", value: "Self-assignable roles using reaction-role systems", inline: true },
         { name: "✅ **Verification**", value: "Member verification workflows and access gating", inline: true },
-        { name: "🔧 **Utilities**", value: "Useful tools and server utilities", inline: true }
+        { name: "🔧 **Utilities**", value: "Useful tools and server utilities", inline: true },
+        { name: "🎯 **Valorant Stats**", value: "Look up Valorant player stats, rank and match history", inline: true }
     );
 
     embed.setFooter({ text: "Made with ❤️" });
