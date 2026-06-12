@@ -20,6 +20,16 @@ export default {
 
     if (message.author.bot || !message.guild) return;
 
+    const antiSpamEnabled =
+  await client.db.get(
+    `antispam:${message.guild.id}`
+  );
+
+if (!antiSpamEnabled) {
+  await handleLeveling(message, client);
+  return;
+}
+
     // Anti-Spam
     const userId = message.author.id;
     const now = Date.now();
