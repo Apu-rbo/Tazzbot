@@ -25,7 +25,6 @@ const CATEGORY_ICONS = {
     Core: "ℹ️",
     Moderation: "🛡️",
     Fun: "🎮",
-    Leveling: "📊",
     Utility: "🔧",
     Ticket: "🎫",
     Welcome: "👋",
@@ -77,7 +76,6 @@ export async function createInitialHelpMenu(client) {
     embed.addFields(
         { name: "🛡️ **Moderation**", value: "Server moderation, user management, and enforcement tools", inline: true },
         { name: "🎮 **Fun**", value: "Games, entertainment, and interactive commands", inline: true },
-        { name: "📊 **Leveling**", value: "User levels, XP system, and progression tracking", inline: true },
         { name: "🎫 **Tickets**", value: "Support ticket system for server management", inline: true },
         { name: "🎉 **Giveaways**", value: "Automated giveaway management and distribution", inline: true },
         { name: "👋 **Welcome**", value: "Member welcome messages and onboarding", inline: true },
