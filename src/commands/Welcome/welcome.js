@@ -284,7 +284,7 @@ export default {
             try {
                 const updates = { dmEnabled: enabled };
                 if (message !== null) {
-                    updates.dmMessage = message;
+                    updates.dmMessage = message.replace(/\\n/g, '\n');
                 }
 
                 const updatedConfig = await updateWelcomeConfig(client, guild.id, updates);
