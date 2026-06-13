@@ -1,5 +1,4 @@
-import { Events, AuditLogEvent } from 'discord.js';
-import { trackAction } from '../utils/antiNuke.js';
+import { Events } from 'discord.js';
 import { logEvent, EVENT_TYPES } from '../services/loggingService.js';
 import { logger } from '../utils/logger.js';
 import { buildRoleAuditFields } from '../utils/roleLogFields.js';
@@ -11,32 +10,6 @@ export default {
   async execute(role) {
     try {
       if (!role.guild) return;
-
-
-      const logs = await role.guild.fetchAuditLogs({
-  limit: 1,
-  type: AuditLogEvent.RoleCreate
-});
-
-const entry = logs.entries.first();
-
-if (entry) {
-  const count = trackAction(entry.executor.id);
-
-  if (count >= 5) {
-    const member = await role.guild.members.fetch(
-      entry.executor.id
-    );
-
-    await member.roles.set([]);
-
-    logger.warn(
-      `ANTI-NUKE: ${entry.executor.tag} mass-created roles`
-    );
-
-    return;
-  }
-}
 
       const fields = buildRoleAuditFields(role);
 
