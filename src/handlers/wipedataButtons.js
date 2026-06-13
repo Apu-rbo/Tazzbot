@@ -19,9 +19,6 @@ const wipedataConfirmHandler = {
 
       
       const dataKeyPatterns = [
-        `economy:${guildId}:${userId}`,
-        `level:${guildId}:${userId}`,
-        `xp:${guildId}:${userId}`,
         `inventory:${guildId}:${userId}`,
         `bank:${guildId}:${userId}`,
         `wallet:${guildId}:${userId}`,
