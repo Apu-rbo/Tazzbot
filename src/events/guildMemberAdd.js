@@ -80,6 +80,20 @@ export default {
             }
         }
         
+if (welcomeConfig?.dmEnabled && welcomeConfig.dmMessage) {
+            try {
+                const dmFormatData = { user, guild, member };
+                const dmContent = formatWelcomeMessage(welcomeConfig.dmMessage, dmFormatData);
+
+                if (dmContent.trim().length > 0) {
+                    await user.send({ content: dmContent });
+                    logger.debug(`Sent welcome DM to ${user.tag} in guild ${guild.id}`);
+                }
+            } catch (error) {
+                logger.debug(`Could not send welcome DM to ${user.tag} (likely has DMs disabled):`, error.message);
+            }
+        }
+
         if (welcomeConfig?.roleIds && welcomeConfig.roleIds.length > 0) {
             const delay = welcomeConfig.autoRoleDelay || 0;
             const singleRoleId = welcomeConfig.roleIds[0];
